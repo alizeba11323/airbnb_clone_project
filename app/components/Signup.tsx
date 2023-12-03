@@ -29,12 +29,23 @@ function Signup({ data, handleChange, errors }: ISignupProps) {
         errors={errors}
       />
       <Input
+        id="email"
+        type="email"
+        label="Email"
+        onChange={handleChange}
+        value={data.email}
+        required
+        disabled={true}
+        errors={errors}
+      />
+      <Input
         id="dob"
         type="date"
         label="Date Of Birth"
         onChange={handleChange}
         value={data.dob}
         required
+        max={new Date().toISOString().split("T"[0])}
         errors={errors}
       />
       <Input

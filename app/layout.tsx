@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Model from "./components/Model";
 import Register from "./components/Register";
 import ToastProvider from "./providers/ToastProvider";
+import GoogleProvider from "./components/GoogleProvider";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -21,10 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <ToastProvider />
-        <Register />
-        <Navbar />
-        {children}
+        <GoogleProvider>
+          <ToastProvider />
+          <Register />
+          <Navbar />
+          {children}
+        </GoogleProvider>
       </body>
     </html>
   );

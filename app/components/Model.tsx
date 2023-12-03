@@ -16,6 +16,8 @@ interface ModelProps {
   secondaryLabel?: string;
   hasNextPage?: boolean;
   setNextPage: React.Dispatch<React.SetStateAction<boolean>>;
+  phoneRegister?: boolean;
+  setPhoneRegister: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const Model: React.FC<ModelProps> = ({
   isOpen,
@@ -30,6 +32,8 @@ const Model: React.FC<ModelProps> = ({
   secondaryLabel,
   hasNextPage,
   setNextPage,
+  phoneRegister,
+  setPhoneRegister,
 }) => {
   const [showModel, setShowModel] = useState(isOpen);
   useEffect(() => {
@@ -37,9 +41,10 @@ const Model: React.FC<ModelProps> = ({
   }, [isOpen]);
   const handleClose = useCallback(() => {
     if (disabled) return;
-    if (hasNextPage) {
-      console.log(hasNextPage);
+    if (hasNextPage && !phoneRegister) {
       setNextPage(false);
+    } else if (hasNextPage && phoneRegister) {
+      setPhoneRegister(false);
     } else {
       setShowModel(false);
       setTimeout(() => {

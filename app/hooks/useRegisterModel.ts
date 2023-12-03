@@ -1,13 +1,15 @@
 import { create } from "zustand";
 
 interface RegisterStoreType {
+  isOpenType: string;
   isOpen: boolean;
-  onOpen: () => void;
+  onOpen: (type: string) => void;
   onClose: () => void;
 }
 const useRegisterModel = create<RegisterStoreType>((set) => ({
+  isOpenType: "",
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
+  onOpen: (isOpenType) => set({ isOpen: true, isOpenType }),
+  onClose: () => set({ isOpen: false, isOpenType: "" }),
 }));
 export default useRegisterModel;

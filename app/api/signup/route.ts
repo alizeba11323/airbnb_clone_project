@@ -7,7 +7,8 @@ dbConnect();
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstname, lastname, dob, password } = await req.json();
+    const { email, firstname, lastname, dob, password, phone } =
+      await req.json();
     const isUserExists = await UserModel.findOne({ email });
     if (isUserExists) {
       return NextResponse.json({
@@ -22,16 +23,19 @@ export async function POST(req: NextRequest) {
       firstname,
       lastname,
       dob,
+      phone,
     });
     const token = await genToken(
       { id: user._id, name: user.firstname },
       "1d",
       process.env.JWT_SECRET!
     );
-    return NextResponse.json(
-      { success: true, user, token, message: "user Register Successfully" },
+    const response = NextResponse.json(
+      { success: true, message: "user Register Successfully" },
       { status: 201 }
     );
+    response.cookies.set("token", token, { httpOnly: true });
+    return response;
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message });
   }

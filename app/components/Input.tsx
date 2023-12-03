@@ -9,6 +9,7 @@ interface InputProps extends React.ComponentProps<"input"> {
   disabled?: boolean;
   required?: boolean;
   errors?: ErrorType;
+  max?: string;
 }
 const Input: React.FC<InputProps> = ({
   label,
@@ -20,6 +21,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   value,
   errors,
+  max,
 }) => {
   return (
     <div className=" relative w-full">
@@ -38,6 +40,7 @@ const Input: React.FC<InputProps> = ({
         disabled={disabled}
         required={required}
         placeholder=" "
+        max={max}
         className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed ${
           errors[id] ? "border-rose-300" : "border-neutral-300"
         } ${errors[id] ? "focus: border-rose-500" : "focus:border-black"}`}

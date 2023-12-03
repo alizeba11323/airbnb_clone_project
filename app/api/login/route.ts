@@ -35,6 +35,6 @@ export async function POST(req: NextRequest) {
     response.cookies.set("token", token, { httpOnly: true });
     return response;
   } catch (err: any) {
-    NextResponse.json({ success: false, message: err.message });
+    return  NextResponse.json({ success: false, message: err.message });
   }
 }

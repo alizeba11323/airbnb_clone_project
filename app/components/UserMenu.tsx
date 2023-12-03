@@ -4,14 +4,30 @@ import Avatar from "./Avatar";
 import { useState, useCallback } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModel from "../hooks/useRegisterModel";
+import useAuthModel from "../hooks/useAuthModel";
+import toast from "react-hot-toast";
+import axios from "axios";
 function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const registerHook = useRegisterModel();
+  const authModel = useAuthModel();
   const handleUser = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
-  const handleMenuToggle = () => {
-    registerHook.onOpen();
+  const handleMenuToggle = async (openType: string) => {
+    if (openType === "logout") {
+      try {
+        const res = await axios.get("http://localhost:3000/api/logout");
+        if (res?.data.success) {
+          toast.success(res.data.message);
+          authModel.onLogout();
+        }
+      } catch (err: any) {
+        toast.error(err.message);
+      }
+    } else {
+      registerHook.onOpen(openType);
+    }
   };
   const handleAirbnbHome = () => {};
   return (
@@ -37,8 +53,23 @@ function UserMenu() {
         <div className="absolute top-12 w-[40vw] md:w-3/4 right-4 text-sm  overflow-hidden  bg-white rounded-lg">
           <div className="flex flex-col cursor-pointer">
             <>
-              <MenuItem label="Login" onClick={handleMenuToggle} />
-              <MenuItem label="Sign Up" onClick={handleMenuToggle} />
+              {authModel.isAuth ? (
+                <MenuItem
+                  label="Logout"
+                  onClick={() => handleMenuToggle("logout")}
+                />
+              ) : (
+                <>
+                  <MenuItem
+                    label="Login"
+                    onClick={() => handleMenuToggle("login")}
+                  />
+                  <MenuItem
+                    label="Sign Up"
+                    onClick={() => handleMenuToggle("register")}
+                  />
+                </>
+              )}
             </>
           </div>
         </div>
