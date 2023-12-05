@@ -71,24 +71,26 @@ function Register() {
             email: session?.data?.user?.email,
           });
           if (res?.data?.success) {
-            setRegisterType("");
+            toast.success("user loggedIn Successfully");
+            return;
+          } else {
+            setData((prev) => ({
+              ...prev,
+              email: session?.data?.user?.email!,
+              firstname: session?.data?.user?.name?.split(" ")[0]!,
+              lastname: session?.data?.user?.name?.split(" ")[1]!,
+            }));
+            setRegisterType("email");
+            setNextPage(true);
+            registerState.onOpen(registerState.isOpenType);
           }
         } catch (err) {
           toast.error("Something Went Wrong");
         }
-        setData((prev) => ({
-          ...prev,
-          email: session?.data?.user?.email!,
-          firstname: session?.data?.user?.name?.split(" ")[0]!,
-          lastname: session?.data?.user?.name?.split(" ")[1]!,
-        }));
-        setRegisterType("email");
-        setNextPage(true);
-        registerState.onOpen(registerState.isOpenType);
       }
     };
     getSignUP();
-  }, [session?.data?.user]);
+  }, [session?.data?.user?.email]);
   const handleClose = () => {
     registerState.onClose();
   };
@@ -194,6 +196,7 @@ function Register() {
         const res = await axios.post("http://localhost:3000/api/signup", {
           ...data,
           phone: phoneNumber,
+          registerType,
         });
         if (res?.data.success) {
           toast.success(res.data.message);
@@ -272,7 +275,12 @@ function Register() {
       {registerType === "phone" ? (
         hasNextPage ? (
           phoneRegister ? (
-            <Signup errors={errors} handleChange={handleChange} data={data} />
+            <Signup
+              errors={errors}
+              handleChange={handleChange}
+              data={data}
+              registerType={registerType}
+            />
           ) : (
             <VerifyPhone phoneNumber={phoneNumber} otp={otp} setOTP={setOTP} />
           )
@@ -294,7 +302,12 @@ function Register() {
             errors={errors}
           />
         ) : (
-          <Signup errors={errors} handleChange={handleChange} data={data} />
+          <Signup
+            errors={errors}
+            handleChange={handleChange}
+            data={data}
+            registerType={registerType}
+          />
         )
       ) : (
         <Input

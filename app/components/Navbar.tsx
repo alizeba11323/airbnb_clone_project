@@ -6,6 +6,7 @@ import Search from "./Search";
 import UserMenu from "./UserMenu";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 import useAuthModel, { RegisterStoreType } from "../hooks/useAuthModel";
 const getMe = async (authModel: RegisterStoreType) => {
   try {
@@ -20,9 +21,10 @@ const getMe = async (authModel: RegisterStoreType) => {
 };
 function Navbar() {
   const authModel = useAuthModel();
+  const { data: session } = useSession();
   useEffect(() => {
     getMe(authModel);
-  }, [authModel.isAuth]);
+  }, [authModel.isAuth, session?.user?.email]);
   return (
     <div className="fixed shadow-sm z-10 w-full bg-white">
       <div className="py-2 border-b-[1px]">

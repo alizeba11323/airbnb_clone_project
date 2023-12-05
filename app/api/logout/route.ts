@@ -7,6 +7,10 @@ export function GET(req: NextRequest) {
       message: "User LoggedOut Successfully",
     });
     response.cookies.set("token", "", { httpOnly: true, expires: new Date(0) });
+    response.cookies.set("next-auth.session-token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
     return response;
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message });

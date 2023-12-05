@@ -5,9 +5,10 @@ interface ISignupProps {
   data: IData;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errors: ErrorType;
+  registerType: string;
 }
 
-function Signup({ data, handleChange, errors }: ISignupProps) {
+function Signup({ data, handleChange, errors, registerType }: ISignupProps) {
   return (
     <div className="flex flex-col gap-2">
       <Input
@@ -35,7 +36,7 @@ function Signup({ data, handleChange, errors }: ISignupProps) {
         onChange={handleChange}
         value={data.email}
         required
-        disabled={true}
+        disabled={registerType === "email" ? true : false}
         errors={errors}
       />
       <Input
@@ -45,7 +46,7 @@ function Signup({ data, handleChange, errors }: ISignupProps) {
         onChange={handleChange}
         value={data.dob}
         required
-        max={new Date().toISOString().split("T"[0])}
+        max={new Date().toISOString().split("T")[0]}
         errors={errors}
       />
       <Input

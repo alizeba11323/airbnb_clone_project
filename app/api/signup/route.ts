@@ -7,10 +7,28 @@ dbConnect();
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstname, lastname, dob, password, phone } =
+    const { email, firstname, lastname, dob, password, phone, registerType } =
       await req.json();
     const isUserExists = await UserModel.findOne({ email });
     if (isUserExists) {
+      if (registerType === "phone" && !isUserExists.phone) {
+        const user = await UserModel.findByIdAndUpdate(
+          isUserExists._id,
+          { phone },
+          { new: true }
+        );
+        const token = await genToken(
+          { id: user._id, name: user.firstname },
+          "1d",
+          process.env.JWT_SECRET!
+        );
+        const response = NextResponse.json(
+          { success: true, message: "user Register Successfully" },
+          { status: 201 }
+        );
+        response.cookies.set("token", token, { httpOnly: true });
+        return response;
+      }
       return NextResponse.json({
         success: false,
         message: "User Already Exists",

@@ -7,7 +7,7 @@ interface RegisterStoreType {
   onClose: () => void;
 }
 const useRegisterModel = create<RegisterStoreType>((set) => ({
-  isOpenType: "",
+  isOpenType: "register",
   isOpen: false,
   onOpen: (isOpenType) => set({ isOpen: true, isOpenType }),
   onClose: () => set({ isOpen: false, isOpenType: "" }),
